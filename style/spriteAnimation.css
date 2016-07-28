@@ -1,0 +1,66 @@
+circle#updatePanel,
+circle#updatePanel-dismissBtn,
+circle#constructionPanel,
+circle#constructionPanel-dismissBtn{
+	animation-duration: 0.15s;
+	animation-timing-function: cubic-bezier(.65,.18,.79,1.55);
+	animation-fill-mode: forwards;
+	animation-iteration-count: 1;	
+}
+@keyframes scale_Panel{
+	from {r: 0}
+	to   {r: 90}
+}
+@keyframes scale_Panel_back{
+	from {r: 90}
+	to   {r: 0}
+}
+circle#updatePanel.show-pattern,
+circle#constructionPanel.show-pattern{
+	animation-name: scale_Panel;
+}
+circle#updatePanel.hide-pattern,
+circle#constructionPanel.hide-pattern{
+	animation-name: scale_Panel_back;
+}
+
+@keyframes scale_PanelDismissBtn{
+	from {r: 0}
+	to   {r: 24}
+}
+@keyframes scale_PanelDismissBtn_back{
+	from {r: 24}
+	to   {r: 0}
+}
+circle#updatePanel-dismissBtn.show-pattern,
+circle#constructionPanel-dismissBtn.show-pattern{
+	animation-name: scale_PanelDismissBtn;
+}
+circle#updatePanel-dismissBtn.hide-pattern
+circle#constructionPanel-dismissBtn.hide-pattern{
+	animation-name: scale_PanelDismissBtn_back;
+}
+
+circle#constructionPanel_weapon_1,
+circle#updatePanel-shovel{
+	animation-duration: 0.15s;
+	animation-timing-function: cubic-bezier(.65,.18,.79,1.55);
+	animation-delay: 0.15s;
+	animation-fill-mode: forwards;
+	animation-iteration-count: 1;	
+}
+@keyframes scale_Panel_weapon_1{
+	from {r: 0}
+	to   {r: 24}
+}
+circle#constructionPanel_weapon_1.show-pattern,
+circle#updatePanel-shovel.show-pattern{
+	animation-name: scale_Panel_weapon_1;
+}
+circle#constructionPanel_weapon_1.hide-pattern,
+circle#updatePanel-shovel.hide-pattern{
+	r: 0;
+}
+
+
+
