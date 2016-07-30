@@ -14,6 +14,7 @@
 </head>
 <body>
 	<script type="text/javascript" src="util/util.js"></script>
+	<script type="text/javascript" src="util/animateEngine.js"></script>
 	<script type="text/javascript" src="util/game-settings.js"></script>
 	<script type="text/javascript" src="util/resource.js"></script>
 	<script type="text/javascript" src="sprites/sprites.js"></script>
@@ -49,6 +50,7 @@
 			canvas_svg.appendChild(resource.factory("cross"))
 			canvas_svg.appendChild(resource.factory("weapon_1_image"));
 			canvas_svg.appendChild(resource.factory("shovel_image"));
+			canvas_svg.appendChild(resource.factory("enemy_level1"));
 	        /*
 				初始化网格
 			*/
@@ -145,6 +147,16 @@
 			canvas_svg.appendChild(CONSTRUCTION_PANEL_DISMISSBTN.SVG_Obj);
 			canvas_svg.appendChild(CONSTRUCTION_PANEL_WEAPON_1.SVG_Obj);
 			document.body.appendChild(canvas_svg);
+
+			var counter = 0;
+			var interval = setInterval(function(){
+				var enemySample = new gm.enemy("enemy_level1");
+				canvas_svg.appendChild(enemySample.SVG_Obj);
+				gm.map.travelAround(enemySample);
+				if(counter++ == 5)
+					clearInterval(interval);
+			}, 500);
+			
 			
 		})(window, game, util, resource)
 	</script>

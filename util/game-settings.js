@@ -23,6 +23,9 @@ var game = window.game || {};
 		},
 		"col": {
 			value: 10
+		},
+		"OneTileToAnotherTimeSpan": {
+			value: 500
 		}
 	})
 })(window, game);

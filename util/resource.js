@@ -173,6 +173,25 @@ var resource = window.resource || {};
 		image.appendTo(patternImage);
 		return defs.elem;
 	}
+	res.enemy_level1 = function(){
+		var defs = $("defs");
+		var enemy = $("pattern").attr({
+			id: "enemy_level1",
+			width: 1,
+			height: 1,
+			patternUnits: "objectBoundingBox",
+			patternContentUnits: "objectBoundingBox"
+		}).appendTo(defs);
+		var image = $("image").attr({
+			x: 0,
+			y: 0,
+			height: 1,
+			width: 1,
+		});
+		image.elem.setAttributeNS(util.xmlnsXlink,'href', "images/Monster1.png");
+		image.appendTo(enemy);
+		return defs.elem;
+	}
 
 	res.weapon_1 = function(){
 		var weapon_1 =  $("rect").attr({
@@ -186,9 +205,18 @@ var resource = window.resource || {};
 		});
 		return weapon_1.elem;
 	}
-	res.enemy = function(){
-		var enemy = $("")
+
+	res.enemy = function(which){
+		var rect = $("rect").attr({
+			x: -20,
+			y: -20,
+			width: 40,
+			height: 40,
+			fill: "url(#"+which+")"
+		})
+		return rect.elem;
 	}
+
 	/*res.updatePanel_shovel = fucntion(){
 		var updatePanel_shovel = $()
 	}*/

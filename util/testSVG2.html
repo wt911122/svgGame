@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<script type="text/javascript" src="util.js"></script>
+<script type="text/javascript" src="resource.js"></script>
+<script type="text/javascript">
+
+
+	var canvas_svg = resource.factory("canvas_svg", 300, 400);
+	var svgimg = document.createElementNS('http://www.w3.org/2000/svg','image');
+	svgimg.setAttribute('height','100');
+	svgimg.setAttribute('width','100');
+	svgimg.setAttribute('id','testimg2');
+	svgimg.setAttributeNS('http://www.w3.org/1999/xlink','href','../images/monster1.png');
+	svgimg.setAttribute('x','0');
+	svgimg.setAttribute('y','0');
+	canvas_svg.appendChild(svgimg);
+
+	document.body.appendChild(canvas_svg);
+	
+	
+</script>
+</body>
+</html>

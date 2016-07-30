@@ -19,10 +19,10 @@ var resource = window.resource || {};
 		PositionActual: function(value){
 			this.SVG_Obj.setAttributeNS (null, "transform", "translate("+ value.CoX+", "+value.CoY+")");
 		},
-		PositionToCoordinate: function(){
+		PositionToCoordinate: function(x, y){
 			return {
-				CoX: gm.settings.width/2 - this.position.x*gm.settings.dx + this.position.y*gm.settings.dx,
-				CoY: gm.settings.padding + gm.settings.dy+ this.position.y*gm.settings.dy + this.position.x*gm.settings.dy 
+				CoX: gm.settings.width/2 - (typeof x === 'number'?x:this.position.x)*gm.settings.dx + (typeof y === 'number'?y:this.position.y)*gm.settings.dx,
+				CoY: gm.settings.padding + gm.settings.dy+ (typeof y === 'number'?y:this.position.y)*gm.settings.dy + (typeof x === 'number'?x:this.position.x)*gm.settings.dy 
 			}
 		},
 		addEventListener: function(whose, type, listener){
@@ -60,7 +60,7 @@ var resource = window.resource || {};
 				});
 		},
 		DESTROY: function(){
-
+			this.SVG_Obj.remove();
 		}
 	}
 
@@ -124,10 +124,10 @@ var resource = window.resource || {};
 		this.Position.call(this, tile.position);
 	}).prototype = Object.create(sprite.prototype);
 
-
-	/*************************
-		改造面板
-	**************************/
+	;(gm.enemy = function(which){
+		this.SVG_Obj = resource.factory("enemy", which);
+		this.Position.call(this, {x: 0, y: -1});
+	}).prototype = Object.create(sprite.prototype);
 
 })(window, game, util, resource);
 

@@ -13,6 +13,7 @@ var util = window.util || {};
 		}
 	}
 	util.xmlns = "http://www.w3.org/2000/svg";
+	util.xmlnsXlink = "http://www.w3.org/1999/xlink";
 
 	util.SVG_DOM = (function(){
 		var SVG_DOM = function(selector){
