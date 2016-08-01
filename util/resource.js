@@ -217,6 +217,16 @@ var resource = window.resource || {};
 		return rect.elem;
 	}
 
+	res.bullet_direct = function(){
+		var circle = $("circle").attr({
+			cx: -5,
+			cy: -5,
+			r: 10,
+			fill: "red"
+		})
+		return circle.elem;
+	}
+
 	/*res.updatePanel_shovel = fucntion(){
 		var updatePanel_shovel = $()
 	}*/

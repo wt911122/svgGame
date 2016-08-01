@@ -3,7 +3,7 @@ var util = window.util || {};
 (function(window, util){
 window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 window.cancelAnimationFrame = window.cancelAnimationFrame  || window.mozCancelAnimationFrame || window.webkitCancelAnimationFrame || window.msCancelAnimationFrame;
-console.log(window.cancelAnimationFrame);
+//console.log(window.cancelAnimationFrame);
 var engine = util.animationEngine = function(fn, res){
 	this.callbackFn = fn;
 	this.continue = true;
@@ -14,7 +14,7 @@ engine.prototype = {
 		this.requestID = window.requestAnimationFrame( this.updateFrame.bind(this) );
 	},
 	stop: function(){
-		console.log(this.requestID);
+		//console.log(this.requestID);
 		window.cancelAnimationFrame( this.requestID )
 	},
 	updateFrame: function(timestamp){

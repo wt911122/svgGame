@@ -19,12 +19,17 @@
 	<script type="text/javascript" src="util/resource.js"></script>
 	<script type="text/javascript" src="sprites/sprites.js"></script>
 	<script type="text/javascript" src="sprites/map.js"></script>
+	<script type="text/javascript" src="util/enemyProperties.js"></script>
+	<script type="text/javascript" src="util/weaponProperties.js"></script>
 	<script type="text/javascript">
 		var game = window.game || {};
 		var util = window.util || {};
 		var resource = window.resource || {};
+		var enemy = window.enemy || {};
+		var weapon = window.weapon || {};
 
-		(function(window, gm, util, resource){
+
+		(function(window, gm, util, resource, enemy, weapon){
 			let width = gm.settings.width;
 			let height = gm.settings.height;
 			let padding = gm.settings.padding;
@@ -33,8 +38,9 @@
 			let xmlns = util.xmlns;
 			let game_level = game.map.level1;
 			gm.weapons = [];
+			gm.enemies = [];
 
-			var TILES = new Array(); // 板块数组
+			var TILES = gm.TILES = new Array(); // 板块数组
 			var CONSTRUCTION_PANEL; //建造面板
 
 			/*
@@ -70,13 +76,42 @@
 
 			let CONSTRUCTION_PANEL_WEAPON_1 = new gm.optionPanelBtn("constructionPanel_weapon_1", "weapon_1_image", {stroke: "black"});
 			CONSTRUCTION_PANEL_WEAPON_1.addEventListener(CONSTRUCTION_PANEL_WEAPON_1, "click", function(){
-				let weapon = new gm.weapon_1(this.parent.tempTile);
-				canvas_svg.insertBefore(weapon.SVG_Obj, document.querySelector('svg > polyline'));
-				this.parent.tempTile.construction = weapon;
+				/*let weapon_1 = new gm.weapon_1(this.parent.tempTile);
+				canvas_svg.insertBefore(weapon_1.SVG_Obj, document.querySelector('svg > polyline'));
+				this.parent.tempTile.construction = weapon_1;*/
 				//console.log(this.parent);
+
+				let weapon_1 = weapon.get("weapon_direct")
+				weapon_1.settle_down(this.parent.tempTile);
+				canvas_svg.insertBefore(weapon_1.sprite.SVG_Obj, document.querySelector('svg > polyline'));
+				weapon_1.watch(canvas_svg);
 				CONSTRUCTION_PANEL.HIDE();
 			})
 			CONSTRUCTION_PANEL.appendVirtureChild(CONSTRUCTION_PANEL_WEAPON_1, util.point(0, -60));
+			CONSTRUCTION_PANEL_WEAPON_1.addEventListener(CONSTRUCTION_PANEL_WEAPON_1, "mouseover", function(){
+				let tile = this.parent.tempTile,
+					pos = tile.position,
+					range = 1;
+				for(var i = pos.x-range < 0?0: pos.x-range; i<= (pos.x+range > 9?9: pos.x+range); i++){
+					for(var j = pos.y-range < 0?0: pos.y-range; j<= (pos.y+range > 9?9: pos.y+range); j++){
+						gm.TILES[i][j].SVG_Obj.setAttributeNS(null, "fill","rgba(255,0,0,0.5)");
+					}
+				}
+			})
+			CONSTRUCTION_PANEL_WEAPON_1.addEventListener(CONSTRUCTION_PANEL_WEAPON_1, "mouseout", function(){
+				let tile = this.parent.tempTile,
+					pos = tile.position,
+					range = 1;
+
+				for(var i = pos.x-range < 0?0: pos.x-range; i<= (pos.x+range > 9?9: pos.x+range); i++){
+					for(var j = pos.y-range < 0?0: pos.y-range; j<= (pos.y+range > 9?9: pos.y+range); j++){
+						if(gm.TILES[i][j].routeTile)
+							gm.TILES[i][j].SVG_Obj.setAttributeNS(null, "fill","rgba(255,255,255,0.3)");
+						else
+							gm.TILES[i][j].SVG_Obj.setAttributeNS(null, "fill","transparent");
+					}
+				}
+			})
 
 			/*
 				初始化改造面板
@@ -148,17 +183,36 @@
 			canvas_svg.appendChild(CONSTRUCTION_PANEL_WEAPON_1.SVG_Obj);
 			document.body.appendChild(canvas_svg);
 
-			var counter = 0;
+		//	console.log(weapon);
+			//weapon.get("weapon_direct").settle_down(TILES[0][0]);
+			var counter = 1;
+			var monstersout = new util.animationEngine(function(timestamp){
+				if(timestamp > 500*counter){
+					console.log(counter);
+					var enemySample = enemy.get("enemy_level1");
+					gm.enemies.push(enemySample);
+					canvas_svg.appendChild(enemySample.sprite.SVG_Obj);
+					enemySample.move();
+					if(counter ++ == 8)
+						return false
+				}
+				return true;
+			}, function(){
+				console.log("level monster all go out!");
+			});
+			monstersout.start();
+
+			/*var counter = 0;
 			var interval = setInterval(function(){
-				var enemySample = new gm.enemy("enemy_level1");
-				canvas_svg.appendChild(enemySample.SVG_Obj);
-				gm.map.travelAround(enemySample);
+				var enemySample = enemy.get("enemy_level1");
+				canvas_svg.appendChild(enemySample.sprite.SVG_Obj);
+				enemySample.move();
 				if(counter++ == 5)
 					clearInterval(interval);
-			}, 500);
+			}, 500);*/
 			
 			
-		})(window, game, util, resource)
+		})(window, game, util, resource, enemy, weapon)
 	</script>
 	
 </body>

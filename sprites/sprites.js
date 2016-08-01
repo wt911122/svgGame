@@ -17,6 +17,7 @@ var resource = window.resource || {};
 			this.SVG_Obj.setAttributeNS (null, "transform", "translate("+ Cood.CoX+", "+Cood.CoY+")");
 		},
 		PositionActual: function(value){
+			this.PositionInFact = value;
 			this.SVG_Obj.setAttributeNS (null, "transform", "translate("+ value.CoX+", "+value.CoY+")");
 		},
 		PositionToCoordinate: function(x, y){
@@ -124,17 +125,19 @@ var resource = window.resource || {};
 		this.Position.call(this, tile.position);
 	}).prototype = Object.create(sprite.prototype);
 
+	;(gm.weapon_direct = function(){
+		this.SVG_Obj = resource.factory('weapon_1');
+	}).prototype = Object.create(sprite.prototype);
+
 	;(gm.enemy = function(which){
 		this.SVG_Obj = resource.factory("enemy", which);
-		this.Position.call(this, {x: 0, y: -1});
+	}).prototype = Object.create(sprite.prototype);
+
+	;(gm.bullet = function(which){
+		this.SVG_Obj = resource.factory(which);
 	}).prototype = Object.create(sprite.prototype);
 
 })(window, game, util, resource);
-
-
-
-
-
 
 
 
