@@ -68,13 +68,20 @@ var weapon = window.weapon || {};
 				this.getRange = function(tile){
 					let tiles = [],
 						pos = tile.position,
-						range = this.range;
-					for(var i = pos.x-range < 0?0: pos.x-range; i<= (pos.x+range > game.col-1?game.col-1: pos.x+range); i++){
-						for(var j = pos.y-range < 0?0: pos.y-range; j<= (pos.y+range > game.row-1?game.row-1: pos.y+range); j++){
-							if(game.TILES[i][j].routeTile)
+						range = this.range,
+						row = game.settings.row,
+						col = game.settings.col;
+
+					for(var i = pos.x-range < 0?0: pos.x-range; i <= (pos.x+range >= col-1?col-1: pos.x+range); i++){
+						for(var j = pos.y-range < 0?0: pos.y-range; j <= (pos.y+range >= row-1?row-1: pos.y+range); j++){
+							//console.log(i, j);
+							if(game.TILES[i][j].routeTile){
+								//
 								tiles.push(game.TILES[i][j]);
+							}
 						}
 					}
+					console.log(tiles);
 					this.range = tiles;
 				}
 				this.watch = function(canvas){
@@ -87,7 +94,9 @@ var weapon = window.weapon || {};
 
 							if(timestamp >= LastTime + span){
 								//console.log("run")
-								if(self.targetEnemy && self.targetEnemy.health > 0 
+								//console.log(!!self.targetEnemy, self.targetEnemy && self.targetEnemy.health > 0)
+								//console.log(self.targetEnemy && self.targetEnemy.health > 0 && path[self.targetEnemy.checkpoint]);
+								if(self.targetEnemy && !self.targetEnemy.escape && self.targetEnemy.health > 0 
 									&& self.withinRange(path[self.targetEnemy.checkpoint])) {
 									console.log("attack target")
 									self.attack();
@@ -95,8 +104,9 @@ var weapon = window.weapon || {};
 								}else if(game.enemies.length > 0){
 									for(var i = 0; i < game.enemies.length ; i++){
 										var enemy = game.enemies[i];
-										if(self.withinRange(path[enemy.checkpoint])){
-											self.targetEnemy = game.enemies[i];
+										if(!enemy.escape && self.withinRange(path[enemy.checkpoint])){
+											console.log(path[enemy.checkpoint])
+											self.targetEnemy = enemy
 											console.log("attack new");
 											self.attack();
 											LastTime = timestamp;

@@ -67,6 +67,7 @@ var enemy = window.enemy || {};
 						return true;
 
 					}, function(){
+						self.escape = true;
 						sprite.DESTROY();
 					});
 					animate.start();
