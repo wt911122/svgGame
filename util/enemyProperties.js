@@ -7,7 +7,7 @@ var enemy = window.enemy || {};
 	enemy.enemyStore = {
 		enemy_level1: {
 			sprite: "enemy_level1",
-			health: 1,
+			health: 3,
 			speed: 500
 		}
 	}
@@ -33,6 +33,9 @@ var enemy = window.enemy || {};
 				this.sprite.position = map.path[0];
 				this.checkpoint = 0;
 				return this;
+			},
+			DESTROY: function(){
+				this.sprite.DESTROY();
 			},
 			move: function(){
 				var path = game.map[game.map.choice].path,
@@ -61,14 +64,15 @@ var enemy = window.enemy || {};
 						}
 
 
-						if(self.checkpoint == path.length){
+						if(self.health <= 0 || self.checkpoint == path.length){
 							return false;
 						}
 						return true;
 
 					}, function(){
-						self.escape = true;
-						sprite.DESTROY();
+						if(self.health > 0)
+							self.escape = true;
+						self.DESTROY();
 					});
 					animate.start();
 			}

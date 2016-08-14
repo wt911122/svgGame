@@ -11,6 +11,7 @@ var engine = util.animationEngine = function(fn, res){
 }
 engine.prototype = {
 	start: function(){
+		this.startTime = undefined;
 		this.requestID = window.requestAnimationFrame( this.updateFrame.bind(this) );
 	},
 	stop: function(){
@@ -20,6 +21,7 @@ engine.prototype = {
 	updateFrame: function(timestamp){
 		if (!this.startTime)
 			this.startTime = timestamp;
+
 		var progress = timestamp - this.startTime;
 
 		if(this.callbackFn(timestamp)){

@@ -52,6 +52,9 @@ var weapon = window.weapon || {};
 				return Array.prototype.some.call(this.range, function(element, index, array){
 					return element.position.x === pos.x && element.position.y === pos.y;
 				})
+			},
+			DESTROY: function(){
+				this.sprite.DESTROY();
 			}
 		}
 
@@ -74,9 +77,7 @@ var weapon = window.weapon || {};
 
 					for(var i = pos.x-range < 0?0: pos.x-range; i <= (pos.x+range >= col-1?col-1: pos.x+range); i++){
 						for(var j = pos.y-range < 0?0: pos.y-range; j <= (pos.y+range >= row-1?row-1: pos.y+range); j++){
-							//console.log(i, j);
 							if(game.TILES[i][j].routeTile){
-								//
 								tiles.push(game.TILES[i][j]);
 							}
 						}
@@ -84,30 +85,30 @@ var weapon = window.weapon || {};
 					console.log(tiles);
 					this.range = tiles;
 				}
+				this.attackable = function(enemy){
+					var path = game.map[game.map.choice].path;
+					return !enemy.escape && enemy.health > 0 && this.withinRange(path[enemy.checkpoint]);
+				}
 				this.watch = function(canvas){
 					this.watchField = canvas;
-					var path = game.map[game.map.choice].path,
-					 	span = this.frequency,
+					
+					var	span = this.frequency,
 						LastTime = 0,
 						self = this,
 						animate = new util.animationEngine(function(timestamp){
 
 							if(timestamp >= LastTime + span){
-								//console.log("run")
-								//console.log(!!self.targetEnemy, self.targetEnemy && self.targetEnemy.health > 0)
-								//console.log(self.targetEnemy && self.targetEnemy.health > 0 && path[self.targetEnemy.checkpoint]);
-								if(self.targetEnemy && !self.targetEnemy.escape && self.targetEnemy.health > 0 
-									&& self.withinRange(path[self.targetEnemy.checkpoint])) {
+								if(self.targetEnemy && self.attackable(self.targetEnemy)) {
 									console.log("attack target")
 									self.attack();
 									LastTime = timestamp;
 								}else if(game.enemies.length > 0){
 									for(var i = 0; i < game.enemies.length ; i++){
 										var enemy = game.enemies[i];
-										if(!enemy.escape && self.withinRange(path[enemy.checkpoint])){
-											console.log(path[enemy.checkpoint])
+										if(self.attackable(enemy)){
+										//	console.log(path[enemy.checkpoint])
 											self.targetEnemy = enemy
-											console.log("attack new");
+										//	console.log("attack new");
 											self.attack();
 											LastTime = timestamp;
 											break;
@@ -127,6 +128,7 @@ var weapon = window.weapon || {};
 						bullet = this.bullet,
 						sprite = new game.bullet(bullet.sprite),
 						target = this.targetEnemy,
+						self = this,
 						PosFrom = game.sprite.prototype.PositionToCoordinate.call(null, this.sprite.position.x, this.sprite.position.y);
 					//console.log(target);
 					sprite.PositionActual({
@@ -141,11 +143,11 @@ var weapon = window.weapon || {};
 								let TO = target.sprite.PositionInFact;
 								let span_T = timestamp - LastTime;
 								let distance = bullet.speed / 1000*span_T;
-							//	console.log(distance)
+						
 								let FROM = sprite.PositionInFact;
 								let span_X = TO.CoX - FROM.CoX;
 								let span_Y = TO.CoY - FROM.CoY; 
-							//	console.log(span_X, span_Y)
+						
 								let scale = distance / Math.sqrt(Math.pow(span_X, 2) + Math.pow(span_Y, 2))
 								
 								let actual_span_X = span_X * scale;
@@ -164,6 +166,9 @@ var weapon = window.weapon || {};
 							return true;
 						},function(){
 							sprite.DESTROY();
+							//console.log("attack")
+							//console.log(self.power, target.health)
+							target.health -= self.power;
 						}); 
 						this.watchField.appendChild(sprite.SVG_Obj)
 						animate.start();

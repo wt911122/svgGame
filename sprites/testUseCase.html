@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>test</title>
+</head>
+<body>
+	<svg id="svg" width="1200px" height="800px" viewBox="0 0 1200 800">
+		<rect id="rect" x="20" y="20" width="200" height="200" fill="red"/>
+		<rect id="rectchild" x="30" y="40" width="50" height="50" fill="black"/>
+	</svg>
+	<script type="text/javascript" src="extend.js"></script>
+	<script type="text/javascript" src="Event.js"></script>
+	<script type="text/javascript">
+		function test(){
+			console.log(this);
+		}
+		createSVGjs.extend(test, createSVGjs.EventDispatcher);
+
+		var obj = new test();
+		obj.addEventListener('something', function(){
+			console.log(this.arguments);
+		});
+		
+
+	</script>
+</body>
+</html>
